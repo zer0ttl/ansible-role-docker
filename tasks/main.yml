@@ -4,61 +4,62 @@
   tags:
     - "{{ role_tags }}"
   block:
-  - name: Load var files
-    ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
-    vars:
-      params:
-        files:
-          - "{{ ansible_distribution }}.yml"
-          - "{{ ansible_os_family }}.yml"
-          - main.yml
-        paths:
-          - "{{ role_path }}/vars"
+    - name: Load var files
+      ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
+      vars:
+        params:
+          files:
+            - "{{ ansible_distribution }}.yml"
+            - "{{ ansible_os_family }}.yml"
+            - main.yml
+          paths:
+            - "{{ role_path }}/vars"
 
-  - name: Print all available facts
-    ansible.builtin.debug:
-      var: ansible_facts
-    when: print_debug
+    - name: Print all available facts
+      ansible.builtin.debug:
+        var: ansible_facts
+      when: print_debug
 
-  - name: Remove all conflicting packages
-    ansible.builtin.apt:
-      name: "{{ remove_docker_packages }}"
-      state: absent
+    - name: Remove all conflicting packages
+      ansible.builtin.apt:
+        name: "{{ remove_docker_packages }}"
+        state: absent
 
-  - name: Update apt repositories
-    ansible.builtin.apt:
-      update_cache: true
+    - name: Update apt repositories
+      ansible.builtin.apt:
+        update_cache: true
 
-  - name: Install required packages
-    ansible.builtin.apt:
-      name: "{{ required_packages }}"
-      state: present
+    - name: Install required packages
+      ansible.builtin.apt:
+        name: "{{ required_packages }}"
+        state: present
 
-  - name: Get platform architecture
-    ansible.builtin.shell: dpkg --print-architecture
-    register: system_architecture
+    - name: Get platform architecture
+      ansible.builtin.command: dpkg --print-architecture
+      register: system_architecture
+      changed_when: false
 
-  - name: Set up Docker's apt repository
-    ansible.builtin.deb822_repository:
-      name: docker
-      suites: "{{ ansible_distribution_release }}"
-      types: deb
-      components: stable
-      architectures: "{{ system_architecture.stdout }}"
-      uris: https://download.docker.com/linux/ubuntu
-      signed_by: https://download.docker.com/linux/ubuntu/gpg
+    - name: Set up Docker's apt repository
+      ansible.builtin.deb822_repository:
+        name: docker
+        suites: "{{ ansible_distribution_release }}"
+        types: deb
+        components: stable
+        architectures: "{{ system_architecture.stdout }}"
+        uris: https://download.docker.com/linux/ubuntu
+        signed_by: https://download.docker.com/linux/ubuntu/gpg
 
-  - name: Update apt sources
-    ansible.builtin.apt:
-      update_cache: true
+    - name: Update apt sources
+      ansible.builtin.apt:
+        update_cache: true
 
-  - name: Install the Docker packages
-    ansible.builtin.apt:
-      name: "{{ install_docker_packages }}"
-      state: present
+    - name: Install the Docker packages
+      ansible.builtin.apt:
+        name: "{{ install_docker_packages }}"
+        state: present
 
-  - name: Add current user to the docker group
-    ansible.builtin.user:
-      name: "{{ ansible_user }}"
-      groups: docker
-      append: true
+    - name: Add current user to the docker group
+      ansible.builtin.user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: true

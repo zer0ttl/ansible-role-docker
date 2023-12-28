@@ -1,7 +1,7 @@
 galaxy_info:
   author: Sudhir Shirsath
   description: Install docker
-
+  role_name: "docker"
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
   # issue_tracker_url: http://example.com/issue/tracker
@@ -13,9 +13,22 @@ galaxy_info:
   # - GPL-3.0-only
   # - Apache-2.0
   # - CC-BY-4.0
-  license: license (GPL-2.0-or-later, MIT, etc)
+  license: MIT
 
-  min_ansible_version: 2.1
+  min_ansible_version: "2.10"
+  namespace: zer0ttl
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+    - name: Kali
+      versions:
+        - "2023"
 
   # If this a Container Enabled role, provide the minimum Ansible Container version.
   # min_ansible_container_version:
