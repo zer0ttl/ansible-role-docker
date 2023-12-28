@@ -1,4 +1,4 @@
-Role Name
+ansible-role-docker
 =========
 
 This role installs docker and its dependencies.
