@@ -1,0 +1,29 @@
+---
+# vars file for ansible-role-docker
+# Role tags
+role_tags:
+  - docker
+
+required_packages:
+  - python3-debian
+  - ca-certificates
+  - curl
+  - gnupg
+
+remove_docker_packages:
+  - docker.io
+  - docker-doc
+  - docker-compose
+  - docker-compose-v2
+  - podman-docker
+  - containerd
+  - runc
+
+install_docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
+
+print_debug: false
