@@ -61,8 +61,8 @@
         types: deb
         components: stable
         architectures: "{{ system_architecture.stdout }}"
-        uris: https://download.docker.com/linux/ubuntu
-        signed_by: https://download.docker.com/linux/ubuntu/gpg
+        uris: https://download.docker.com/linux/{{ ansible_distribution | lower }}
+        signed_by: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
 
     - name: Update apt sources
       ansible.builtin.apt:
